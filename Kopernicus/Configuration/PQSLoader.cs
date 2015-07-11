@@ -7,7 +7,7 @@
  * Maintained by: - Thomas P.
  * 				  - NathanKell
  * 
- * Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, 
+* Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, zengei, MrHappyFace
  * ------------------------------------------------------------- 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -97,6 +97,25 @@ namespace Kopernicus
 			{
 				set { pqsVersion.maxQuadLenghtsPerFrame = value.value; }
 			}
+
+			// CelestialBodyTransform fades. should more or less line up with ScaledVersion's fadeStart/fadeEnd
+			[ParserTarget("pqsFadeStart", optional = true)]
+			private NumericParser<float> fadeStart
+			{
+				set { transform.planetFade.fadeStart = value.value; }
+			}
+
+			[ParserTarget("pqsFadeEnd", optional = true)]
+			private NumericParser<float> fadeEnd
+			{
+				set { transform.planetFade.fadeEnd = value.value; }
+			}
+
+            [ParserTarget("deactivateAltitude", optional = true)]
+            private NumericParser<double> deactivateAltitude
+            {
+                set { transform.deactivateAltitude = value.value; }
+            }
 
 			[PreApply]
 			[ParserTarget("materialType", optional = true)]

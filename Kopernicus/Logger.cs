@@ -7,7 +7,7 @@
  * Maintained by: - Thomas P.
  * 				  - NathanKell
  * 
- * Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, 
+* Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, zengei, MrHappyFace
  * ------------------------------------------------------------- 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -60,7 +60,17 @@ namespace Kopernicus
 		}
 
 		// Currently active logger
-		public static Logger Active { get ; private set; }
+        private static Logger _ActiveLogger = null;
+        public static Logger Active
+        {
+            get
+            {
+                if (_ActiveLogger.loggerStream == null)
+                    return _DefaultLogger;
+                return _ActiveLogger;
+            }
+            private set { _ActiveLogger = value; }
+        }
 
 		// The complete path of this log
 		TextWriter loggerStream;
@@ -96,6 +106,7 @@ namespace Kopernicus
 		{
 			loggerStream.Flush ();
 			loggerStream.Close ();
+            loggerStream = null;
 		}
 
 		// Create a logger

@@ -7,7 +7,7 @@
  * Maintained by: - Thomas P.
  * 				  - NathanKell
  * 
- * Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, 
+* Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, zengei, MrHappyFace
  * ------------------------------------------------------------- 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -138,6 +138,15 @@ namespace Kopernicus
                     string[] colorArray = s.Split(',');
 
                     value = new Color(float.Parse(colorArray[0]) / 255, float.Parse(colorArray[1]) / 255, float.Parse(colorArray[2]) / 255, float.Parse(colorArray[3]) / 255);
+                }
+                else if (s.StartsWith("XKCD."))
+                {
+                    PropertyInfo color = typeof(XKCDColors).GetProperty(s.Replace("XKCD.", ""), BindingFlags.Static | BindingFlags.Public);
+                    value = (Color)color.GetValue(null, null);
+                }
+                else if (s.StartsWith("#"))
+                {
+                    value = XKCDColors.ColorTranslator.FromHtml(s);
                 }
                 else
                 {

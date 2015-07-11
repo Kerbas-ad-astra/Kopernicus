@@ -7,7 +7,7 @@
  * Maintained by: - Thomas P.
  * 				  - NathanKell
  * 
- * Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, 
+* Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, zengei, MrHappyFace
  * ------------------------------------------------------------- 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -31,13 +31,8 @@
  * https://kerbalspaceprogram.com
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using UnityEngine;
-using KSP;
 using System.Reflection;
 
 namespace Kopernicus
@@ -163,9 +158,11 @@ namespace Kopernicus
             {
                 if (afg.planet != null)
                 {
-                    Debug.Log("[Kopernicus]: Patching AFG " + afg.planet.bodyName);
-                    if (!AFGInfo.PatchAFG(afg))
-                        Debug.Log("[Kopernicus]: ERROR AtmosphereFixer => Couldn't patch AtmosphereFromGround for " + afg.planet.bodyName + "!");
+                    //Debug.Log("[Kopernicus]: Patching AFG " + afg.planet.bodyName);
+                    //if (!AFGInfo.PatchAFG(afg))
+                    //    Debug.Log("[Kopernicus]: ERROR AtmosphereFixer => Couldn't patch AtmosphereFromGround for " + afg.planet.bodyName + "!");
+                    if (AFGInfo.PatchAFG(afg))
+                        Debug.Log("[Kopernicus]: AtmosphereFixer => Patched AtmosphereFromGround for " + afg.planet.bodyName);
                 }
             }
             UnityEngine.Object.Destroy(this); // don't hang around.

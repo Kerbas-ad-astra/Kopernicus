@@ -7,7 +7,7 @@
  * Maintained by: - Thomas P.
  * 				  - NathanKell
  * 
- * Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, 
+* Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, zengei, MrHappyFace
  * ------------------------------------------------------------- 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -48,7 +48,7 @@ namespace Kopernicus
         public class Version
         {
             // Versioning information
-            private static int[] versionNumber = new int[] { 0, 1 }; 
+            private static int[] versionNumber = new int[] { 0, 2, 2 }; 
             private static bool developmentBuild = false;
             public static string version
             {

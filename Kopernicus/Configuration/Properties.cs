@@ -7,7 +7,7 @@
  * Maintained by: - Thomas P.
  * 				  - NathanKell
  * 
- * Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, 
+* Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, zengei, MrHappyFace
  * ------------------------------------------------------------- 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -156,8 +156,22 @@ namespace Kopernicus
 			[ParserTarget("sphereOfInfluence", optional = true)]
 			private NumericParser<double> sphereOfInfluence
 			{
-				set { celestialBody.sphereOfInfluence = value.value; }
+                set { Templates.sphereOfInfluence.Add(celestialBody.name, value.value); }
 			}
+
+            // Hill Sphere
+            [ParserTarget("hillSphere", optional = true)]
+            private NumericParser<double> hillSphere
+            {
+                set { Templates.hillSphere.Add(celestialBody.bodyTransform.name, value.value); }
+            }
+
+            // solarRotationPeriod
+            [ParserTarget("solarRotationPeriod", optional = true)]
+            private NumericParser<bool> solarRotationPeriod
+            {
+                set { celestialBody.solarRotationPeriod = value.value; }
+            }
 
 			// Science values of this body
 			[ParserTarget("ScienceValues", optional = true, allowMerge = true)]

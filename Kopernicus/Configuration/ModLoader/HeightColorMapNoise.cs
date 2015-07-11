@@ -7,7 +7,7 @@
  * Maintained by: - Thomas P.
  * 				  - NathanKell
  * 
- * Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, 
+* Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, zengei, MrHappyFace
  * ------------------------------------------------------------- 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -77,7 +77,7 @@ namespace Kopernicus
 					[ParserTarget("altitudeEnd")]
 					private NumericParser<double> altitudeEnd
 					{
-						set { landClassNoise.altStart = value.value; }
+						set { landClassNoise.altEnd = value.value; }
 					}
 
 					// Should we blend into the next class

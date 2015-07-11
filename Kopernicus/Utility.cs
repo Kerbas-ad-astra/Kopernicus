@@ -7,7 +7,7 @@
  * Maintained by: - Thomas P.
  * 				  - NathanKell
  * 
- * Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, 
+* Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, zengei, MrHappyFace
  * ------------------------------------------------------------- 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -398,8 +398,14 @@ namespace Kopernicus
 
                 Type[] blacklist = new Type[] { typeof(PQSMod_MapDecal), typeof(OnDemand.PQSMod_OnDemandHandler) };
 
+                // Deactivate blacklisted Mods
+                foreach (PQSMod mod in pqsVersion.GetComponentsInChildren<PQSMod>(true).Where(m => blacklist.Contains(m.GetType())))
+                {
+                    mod.modEnabled = false;
+                }
+
                 // Find the PQS mods and enable the PQS-sphere
-                IEnumerable<PQSMod> mods = pqsVersion.GetComponentsInChildren<PQSMod>(true).Where(m => !blacklist.Contains(m.GetType()) && m.modEnabled);
+                IEnumerable<PQSMod> mods = pqsVersion.GetComponentsInChildren<PQSMod>(true).Where(m => m.modEnabled);
 
                 pqsVersion.ActivateSphere();
 
@@ -426,7 +432,10 @@ namespace Kopernicus
 
                         // Build from the PQS
                         foreach (PQSMod mod in mods)
+                        {
+                            mod.OnVertexBuild(vertex); // Why in heaven are there mods who modify height in OnVertexBuild() rather than OnVertexBuildHeight()?!?!
                             mod.OnVertexBuildHeight(vertex);
+                        }
 
                         // Check for sea level
                         if (body.ocean && vertex.vertHeight < body.Radius)

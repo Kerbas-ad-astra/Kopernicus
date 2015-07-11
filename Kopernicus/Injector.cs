@@ -7,7 +7,7 @@
  * Maintained by: - Thomas P.
  * 				  - NathanKell
  * 
- * Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, 
+* Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, zengei, MrHappyFace
  * ------------------------------------------------------------- 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -105,11 +105,31 @@ namespace Kopernicus
 		public void PostSpawnFixups ()
 		{
             Debug.Log("[Kopernicus]: Post-Spawn");
-			// Fix the flight globals index of each body
+
+			// Fix the flight globals index of each body and patch it's SOI
 			int counter = 0;
 			foreach (CelestialBody body in FlightGlobals.Bodies) 
 			{
 				body.flightGlobalsIndex = counter++;
+
+                // Path the SOI
+                if (Templates.sphereOfInfluence.ContainsKey(body.bodyTransform.name))
+                {
+                    body.sphereOfInfluence = Templates.sphereOfInfluence[body.bodyTransform.name];
+                }
+
+                // Patch the Hill Sphere
+                if (Templates.hillSphere.ContainsKey(body.bodyTransform.name))
+                {
+                    body.hillSphere = Templates.hillSphere[body.bodyTransform.name];
+                }
+
+                // Make the Body a barycenter
+                if (Templates.barycenters.Contains(body.GetTransform().name))
+                {
+                    body.scaledBody.SetActiveRecursively(false);
+                }
+
 				Logger.Default.Log ("Found Body: " + body.bodyName + ":" + body.flightGlobalsIndex + " -> SOI = " + body.sphereOfInfluence + ", Hill Sphere = " + body.hillSphere);
 			}
 

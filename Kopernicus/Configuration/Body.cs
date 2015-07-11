@@ -7,7 +7,7 @@
  * Maintained by: - Thomas P.
  * 				  - NathanKell
  * 
- * Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, 
+* Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, zengei, MrHappyFace
  * ------------------------------------------------------------- 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -72,6 +72,9 @@ namespace Kopernicus
 
             [ParserTarget("cacheFile", optional = true)]
             public string cacheFile { get; set; }
+
+            [ParserTarget("baryCenter", optional = true)]
+            private NumericParser<bool> barycenter { get; set; }
 
 			[ParserTarget("cbNameLater", optional = true)]
             private string cbNameLater
@@ -349,6 +352,29 @@ namespace Kopernicus
 					{
 						component.powerCurve = solarPowerCurve.curve;
 					}
+                }
+                
+                // If we're a barycenter
+                if (barycenter != null && barycenter.value)
+                {
+                    // Register the body for post-spawn patching
+                    Templates.barycenters.Add(generatedBody.celestialBody.GetName());
+
+                    // Nuke the PQS
+                    if (generatedBody.pqsVersion != null)
+                    {
+                        generatedBody.pqsVersion.gameObject.transform.parent = null;
+                        MonoBehaviour.Destroy(generatedBody.pqsVersion);
+                        generatedBody.pqsVersion = null;
+                    }
+                    /*
+                    // Nuke the ScaledSpace
+                    generatedBody.scaledVersion.transform.parent = null;
+                    MonoBehaviour.Destroy(generatedBody.scaledVersion);
+                    generatedBody.scaledVersion = null;
+                    */
+                    // Stop ScaledSpace Cache
+                    scaledVersion.generateMesh = false;
                 }
 
                 #region DebugMode

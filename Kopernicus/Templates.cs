@@ -7,7 +7,7 @@
  * Maintained by: - Thomas P.
  * 				  - NathanKell
  * 
- * Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, 
+* Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, zengei, MrHappyFace
  * ------------------------------------------------------------- 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -68,6 +68,13 @@ namespace Kopernicus
         public List<string> finalizeBodies;
 
         public static string menuBody = "Kerbin";
+
+        // SOI's
+        public static Dictionary<string, double> sphereOfInfluence;
+        public static Dictionary<string, double> hillSphere;
+
+        // Barycenters
+        public static List<string> barycenters;
         
         public Templates()
         {
@@ -100,7 +107,12 @@ namespace Kopernicus
             // Return it's mesh
             refGeosphere = Jool.scaledVersion.GetComponent<MeshFilter>().sharedMesh;
 
+            // Initialize the Sphere-Lists
+            sphereOfInfluence = new Dictionary<string, double>();
+            hillSphere = new Dictionary<string, double>();
 
+            // Initialize the barycenter list
+            barycenters = new List<string>();
 
             finalizeBodies = new List<string>();
         }
