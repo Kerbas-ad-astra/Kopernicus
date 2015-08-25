@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Kopernicus Planetary System Modifier
  * ====================================
  * Created by: - Bryce C Schroeder (bryce.schroeder@gmail.com)
@@ -35,31 +35,26 @@ using System;
 
 namespace Kopernicus
 {
-    namespace Configuration
-    {
-        /**
-         * Attribute used to tag a property or field which can be targeted by the parser
-         **/
-        [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-        public class ParserTarget : Attribute
-        {
-            // Storage key in config node tree.  If null, key is determined with reflection
-            public string fieldName = null;
-            
-            // Flag indiciating whether the presence of this value is required
-            public bool optional = true;
-            
-            // Flag indiciating whether the contents of the config tree can be merged
-            // via reflection with a potentially present field.  If the field is null,
-            // this flag is disregarged
-            public bool allowMerge = false;
-            
-            // Constructor sets name
-            public ParserTarget(string fieldName = null)
-            {
-                this.fieldName = fieldName;
-            }
-        }
-    }
+	namespace Configuration
+	{
+		/**
+		 * Attribute used to tag a class in another library to add it to the ParserTargets for Body
+		 **/
+		[AttributeUsage(AttributeTargets.Class)]
+		public class ExternalParserTarget : Attribute
+		{
+			// Like the ParserTarget, if null, this will be determined via reflection
+			public string configNodeName = null;
+
+			// The parser will look for this in the node with this name
+			public string parentNodeName = "Body";
+
+			// Constructor sets name
+			public ExternalParserTarget(string configNodeName = null)
+			{
+				this.configNodeName = configNodeName;
+			}
+		}
+	}
 }
 

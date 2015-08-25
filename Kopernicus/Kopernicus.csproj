@@ -3,8 +3,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{AA91123F-E3D2-4BC0-8BDB-F8B6CFDC6C10}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Kopernicus</RootNamespace>
@@ -34,12 +32,8 @@
       <HintPath>..\..\..\Programme\Steam\steamapps\common\Kerbal Space Program\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="System">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.Core">
-      <Private>False</Private>
-    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\Programme\Steam\steamapps\common\Kerbal Space Program\KSP_Data\Managed\UnityEngine.dll</HintPath>
       <Private>False</Private>
@@ -61,6 +55,8 @@
     <Compile Include="Configuration\ModLoader\VertexPlanet.cs" />
     <Compile Include="Configuration\HazardousOcean.cs" />
     <Compile Include="Configuration\ModLoader\VertexSimplexColorRGB.cs" />
+    <Compile Include="Configuration\Parser\External\ExternalParserTarget.cs" />
+    <Compile Include="Configuration\Parser\External\ExternalParserTargetLoader.cs" />
     <Compile Include="Configuration\Parser\ObjImporter.cs" />
     <Compile Include="Configuration\SpaceCenterSwitcher.cs" />
     <Compile Include="Configuration\LightShifter.cs" />
@@ -195,7 +191,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Configuration\Resources\Shaders.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Shaders.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
