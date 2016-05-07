@@ -1,52 +1,41 @@
-Kopernicus Beta Release 5.2
+Kopernicus
 ==============================
-November 18th, 2015
+April 20th, 2016
 * Created by: BryceSchroeder and Teknoman117 (aka. Nathaniel R. Lewis)
 * Maintained by: Thomas P., NathanKell and KillAshley
 * Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, zengei, MrHappyFace, Majiir (CompatibilityChecker)
 
-New in this version
+New in this version (1.0)
 -------------------
-- Implemented working OnDemand-Loading library, for MapSO, CBAttributeMapSO and ScaledSpace Textures
-- Removed .mu support for Scatter Meshes, because it doesn't fit well for this purpose
-- Added support for BUILTIN/ Biome Maps
-- Added operators to convert the internal parsers to their respective values
-- Moved custom components into a seperate library
-- Complete reengineering of the code. Kopernicus code is now much cleaner, easier to extend and to debug
-- ModLoader is now powered by generics, so that the whole namespace is cleaner
-- External ModLoaders don't have to use the Namespace Kopernicus.Configuration.ModLoader anymore. Use whatever you want :)
-- Removed the custom ring shaders and reverted back to the builtin ones. Fixed the halo-bug differently
-- Created components for Rings and the KSC mover, to make them more modular
-- Added support for SOI-Debbugging (i.e. making the SOI visible). Use Debug { showSOI = true }
-- Removed Debug { exportBin } option, and added exportMesh and update. exportMesh will force Kopernicus to write a mesh (or not), and update will force a ScaledSpace Update, which is neccisary for exportMesh.
-- Cleaned up the runtime utility, everything is now in a single class (no KSPAdddon spam)
-- Removed the old Finalize System
-- Added Body { finalizeOrbit } which will apply the same changes to this single body like the old System did to all bodies
-- Implemented BaseLoader, to fetch the currently edited PSystemBody. That allows us to create everything in the background.
-- Renamed all loading classes to <ThingItLoads>Loader, to have a consistent naming scheme.
-- Added getters and setters to almost all parser targets, to support dynamic generation of Kopernicus configs.
-- Official KSP 1.0.5 support
-- Removed the non-spherical ocean feature, because PartBuoyancy is way to complex now, so I can't replicate it's behaviour.
-- Removed the energy curve for stars in Body {}
-- Renamed ScaledVersion { SolarLightColor { } } to Light { }
-- Added luminosity and insolation settings to Light { }, to patch the light behaviour that is executed by the FlightIntegrator
-- Removed the need for Planetarium.fetch.Sun replacement, SolarPanels are now moddable (thanks NathanKell!)
-- Added Majiir's CompatibilityChecker, to lock Kopernicus on unsupported versions
-- Moved Ocean { HazardousOcean { HeatCurve { } } } to Ocean { HazardousOcean { } }
-- Completely removed the debugging utility, including the exporting tool (Mod+E+P). You are encouraged to use KittopiaTechs exporter.
-- Added density value to the Ocean node, to parse the density of the ocean
-- Added FogParser to parse the Underwater-Fog from an Ocean { Fog { } } node.
-- Many other changes that I forgot, if you find something that has changed, feel free to inform me.
-
-New in 0.5.1
-------------
-- Fixed a bug where Kopernicus crashes if the body doesn't have a ScaledVersion { } node
-- Made more things public, so that other mods can access them.
-
-New in 0.5.2
-------------
-- Fixed a bug that was introduced through 0.5.1 bugfixing
-- Fixed ScaledSpace OnDemand loading for gas giants
+* Fixed an issues with subobjects on PQSMods (like landclasses)
+* Fixed an issue with PQS on template-less worlds
+* Fixed a Material issue in LandControl
+* Added the biome map settings "nonExactThreshold" and "exactSearch" to the Properties node
+* Added a loader for mapMaxHeight in the PQS node
+* Added a loader for lacunarity in VertexHeightNoiseVertHeight
+* Added the ability to reference PQSMods by name and index in the component tree in removePQSMods. (removePQSMods = PQSMod_VertexHeightMap[_Height, 1] would remove the second heightmap named _Height)
+* Updated the code to make use of the updated KSP 1.1 and Unity 5 API
+* Tried to implement async loading of scaled space textures (on demand), but failed because Unity was doing weird things :(
+* Removed PQSMod_FixedOblate and PQSMod_FixedOffset - the fixes are now included in the stock versions
+* Removed oceanFogColorAltMult because it is gone in KSP
+* Fixed an issue with custom orbit modes
+* Actually remove hidden bodies in RnD, not just remove their thumbnail and center the name
+* Updated the shader wrappers to the 1.1 versions and did some updates to the generator
+* Added maxViewDistance override for tracking station to the Kopernicus node
+* Added null checks
+* Added more null checks
+* Fixed OceanFX creation
+* Made some changes to make changing the scaled space material possible (again?)
+* Only build rings if they aren't built
+* Added removeCoronas option in Template that hides the coronas of a star
+* Removed Win64 warning from CompatibilityChecker (it might still appear as I didn't bump the version number of CC and other mods could override Kopernicus checker)
+* Use GL calls to draw the lines for the SOI debugger instead of Vectrosity, makes them nicer and easier to use
+* Made the orbit generation for the asteroids more customizeable (there will be some mods using it out soon, so I won't explain the structure now)
+* Added the ability to patch the config node that gets created by the asteroid loader and that contains the vessel that gets created (Savegame VESSEL syntax)
+* Automated unloading of MapSO's after being unused for 1 minute
+* FINALLY fixed the issue where adding an AFG to a templated planet would cause a black sky and no AFG \o/
+* Fixed the previously added null checks
+* Added a loader for the fade multiplier in scaled space fader
 
 Note - reparenting Kerbin or the Sun causes the sky to be incorrect in the space center view. It is, however, correct in the flight view and the flight map view.  Reparenting the sun causes other stars positions to not update in the tracking station for some reason.
 
@@ -76,3 +65,15 @@ Selectively copy folders inside of [KopernicusExamples/](https://github.com/Kope
 Information
 -----------
 Coming Soon
+
+Compiling
+----------
+To compile Kopernicus you need to add the following assemblies from your KSP_Data/Managed folder into the toplevel directory of the repository:
+
+* Assembly-CSharp.dll
+* Assembly-CSharp-firstpass.dll
+* KSPUtil.dll
+* UnityEngine.dll
+* UnityEngine.UI.dll
+
+After that you can compile the .sln file with VS, MonoDevelop or other build tools. If you have Linux experience you can use Makefiles too, however, you will need Microsofts Roslyn compiler for it. 
