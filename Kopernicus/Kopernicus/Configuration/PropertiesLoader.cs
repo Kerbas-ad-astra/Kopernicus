@@ -42,7 +42,7 @@ namespace Kopernicus
             public CelestialBody celestialBody { get; set; }
 
             // Body description
-            [ParserTarget("description", optional = true)]
+            [ParserTarget("description")]
             public string description 
             {
                 get { return celestialBody.bodyDescription; }
@@ -50,7 +50,7 @@ namespace Kopernicus
             }
 
             // Radius
-            [ParserTarget("radius", optional = true)]
+            [ParserTarget("radius")]
             public NumericParser<double> radius 
             {
                 get { return celestialBody.Radius; }
@@ -58,16 +58,15 @@ namespace Kopernicus
             }
             
             // GeeASL
-            [ParserTarget("geeASL", optional = true)]
+            [ParserTarget("geeASL")]
             public NumericParser<double> geeASL 
             {
                 get { return celestialBody.GeeASL; }
-                set { celestialBody.GeeASL = value; hasGeeASL = true; }
+                set { celestialBody.GeeASL = value; }
             }
-            private bool hasGeeASL = false;
             
             // Mass
-            [ParserTarget("mass", optional = true)]
+            [ParserTarget("mass")]
             public NumericParser<double> mass
             {
                 get { return celestialBody.Mass; }
@@ -76,7 +75,7 @@ namespace Kopernicus
             private bool hasMass = false;
 
             // Grav Param
-            [ParserTarget("gravParameter", optional = true)]
+            [ParserTarget("gravParameter")]
             public NumericParser<double> gravParameter
             {
                 get { return celestialBody.gravParameter; }
@@ -85,7 +84,7 @@ namespace Kopernicus
             private bool hasGravParam = false;
             
             // Does the body rotate?
-            [ParserTarget("rotates", optional = true)]
+            [ParserTarget("rotates")]
             public NumericParser<bool> rotates
             {
                 get { return celestialBody.rotates; }
@@ -93,7 +92,7 @@ namespace Kopernicus
             }
             
             // Rotation period of the world
-            [ParserTarget("rotationPeriod", optional = true)]
+            [ParserTarget("rotationPeriod")]
             public NumericParser<double> rotationPeriod
             {
                 get { return celestialBody.rotationPeriod; }
@@ -101,7 +100,7 @@ namespace Kopernicus
             }
             
             // Is the body tidally locked to its parent?
-            [ParserTarget("tidallyLocked", optional = true)]
+            [ParserTarget("tidallyLocked")]
             public NumericParser<bool> tidallyLocked
             {
                 get { return celestialBody.tidallyLocked; }
@@ -109,7 +108,7 @@ namespace Kopernicus
             }
 
             // Initial rotation of the world
-            [ParserTarget("initialRotation", optional = true)]
+            [ParserTarget("initialRotation")]
             public NumericParser<double> initialRotation
             {
                 get { return celestialBody.initialRotation; }
@@ -117,7 +116,7 @@ namespace Kopernicus
             }
 
             // Altitude where the Game switches the reference frame
-            [ParserTarget("inverseRotThresholdAltitude", optional = true)]
+            [ParserTarget("inverseRotThresholdAltitude")]
             public NumericParser<float> inverseRotThresholdAltitude
             {
                 get { return celestialBody.inverseRotThresholdAltitude; }
@@ -125,7 +124,7 @@ namespace Kopernicus
             }
             
             // albedo
-            [ParserTarget("albedo", optional = true)]
+            [ParserTarget("albedo")]
             public NumericParser<double> albedo
             {
                 get { return celestialBody.albedo; }
@@ -133,7 +132,7 @@ namespace Kopernicus
             }
 
             // emissivity
-            [ParserTarget("emissivity", optional = true)]
+            [ParserTarget("emissivity")]
             public NumericParser<double> emissivity
             {
                 get { return celestialBody.emissivity; }
@@ -141,7 +140,7 @@ namespace Kopernicus
             }
 
             // coreTemperatureOffset
-            [ParserTarget("coreTemperatureOffset", optional = true)]
+            [ParserTarget("coreTemperatureOffset")]
             public NumericParser<double> coreTemperatureOffset
             {
                 get { return celestialBody.coreTemperatureOffset; }
@@ -149,7 +148,7 @@ namespace Kopernicus
             }
             
             // Is this the home world
-            [ParserTarget("isHomeWorld", optional = true)]
+            [ParserTarget("isHomeWorld")]
             public NumericParser<bool> isHomeWorld
             {
                 get { return celestialBody.isHomeWorld; }
@@ -157,7 +156,7 @@ namespace Kopernicus
             }
 
             // Time warp altitude limits
-            [ParserTarget("timewarpAltitudeLimits", optional = true)]
+            [ParserTarget("timewarpAltitudeLimits")]
             public NumericCollectionParser<float> timewarpAltitudeLimits 
             {
                 get { return celestialBody.timeWarpAltitudeLimits != null ? celestialBody.timeWarpAltitudeLimits : new float[0]; }
@@ -165,7 +164,7 @@ namespace Kopernicus
             }
 
             // Sphere of Influence
-            [ParserTarget("sphereOfInfluence", optional = true)]
+            [ParserTarget("sphereOfInfluence")]
             public NumericParser<double> sphereOfInfluence
             {
                 get { return celestialBody.sphereOfInfluence; }
@@ -173,7 +172,7 @@ namespace Kopernicus
             }
 
             // Hill Sphere
-            [ParserTarget("hillSphere", optional = true)]
+            [ParserTarget("hillSphere")]
             public NumericParser<double> hillSphere
             {
                 get { return celestialBody.hillSphere; }
@@ -181,7 +180,7 @@ namespace Kopernicus
             }
 
             // solarRotationPeriod
-            [ParserTarget("solarRotationPeriod", optional = true)]
+            [ParserTarget("solarRotationPeriod")]
             public NumericParser<bool> solarRotationPeriod
             {
                 get { return celestialBody.solarRotationPeriod; }
@@ -189,24 +188,31 @@ namespace Kopernicus
             }
 
             // navballSwitchRadiusMult
-            [ParserTarget("navballSwitchRadiusMult", optional = true)]
+            [ParserTarget("navballSwitchRadiusMult")]
             public NumericParser<double> navballSwitchRadiusMult
             {
                 get { return celestialBody.navballSwitchRadiusMult; }
                 set { celestialBody.navballSwitchRadiusMult = value; }
             }
+            // navballSwitchRadiusMult
+            [ParserTarget("navballSwitchRadiusMultLow")]
+            public NumericParser<double> navballSwitchRadiusMultLow
+            {
+                get { return celestialBody.navballSwitchRadiusMultLow; }
+                set { celestialBody.navballSwitchRadiusMultLow = value; }
+            }
 
             // Science values of this body
-            [ParserTarget("ScienceValues", optional = true, allowMerge = true)]
+            [ParserTarget("ScienceValues", allowMerge = true)]
             public ScienceValuesLoader scienceValues { get; set; }
 
             // Biomes of this body
             [PreApply]
-            [ParserTargetCollection("Biomes", optional = true, nameSignificance = NameSignificance.None)]
+            [ParserTargetCollection("Biomes", nameSignificance = NameSignificance.None)]
             public List<BiomeLoader> biomes = new List<BiomeLoader>();
 
             // Biome definition via MapSO parser
-            [ParserTarget("biomeMap", optional = true)]
+            [ParserTarget("biomeMap")]
             public MapSOParser_RGB<CBAttributeMapSO> biomeMap
             {
                 get { return celestialBody.BiomeMap; }
@@ -223,7 +229,7 @@ namespace Kopernicus
             }
 
             // Threshold for Biomes
-            [ParserTarget("nonExactThreshold", optional = true)]
+            [ParserTarget("nonExactThreshold")]
             public NumericParser<float> nonExactThreshold
             {
                 get { return celestialBody.BiomeMap != null ? celestialBody.BiomeMap.nonExactThreshold : 0.05f; }
@@ -231,7 +237,7 @@ namespace Kopernicus
             }
 
             // If the biome threshold should get used
-            [ParserTarget("exactSearch", optional = true)]
+            [ParserTarget("exactSearch")]
             public NumericParser<bool> exactSearch
             {
                 get { return celestialBody.BiomeMap != null ? celestialBody.BiomeMap.exactSearch : false; }
@@ -239,7 +245,7 @@ namespace Kopernicus
             }
 
             // If the body name should be prefixed with "the" in some situations
-            [ParserTarget("useTheInName", optional = true)]
+            [ParserTarget("useTheInName")]
             public NumericParser<bool> useTheInName
             {
                 get { return celestialBody.use_The_InName; }
@@ -247,7 +253,7 @@ namespace Kopernicus
             }
 
             // If the body should be unselectable
-            [ParserTarget("selectable", optional = true)]
+            [ParserTarget("selectable")]
             public NumericParser<bool> selectable
             {
                 get { return !Templates.notSelectable.Contains(celestialBody.transform.name); }
@@ -255,7 +261,7 @@ namespace Kopernicus
             }
 
             // If the body should be hidden in RnD
-            [ParserTarget("hiddenRnD", optional = true)]
+            [ParserTarget("hiddenRnD")]
             public NumericParser<bool> hiddenRnD
             {
                 get { return Templates.hiddenRnD.Contains(celestialBody.transform.name); }

@@ -61,7 +61,7 @@ namespace Kopernicus
             public PQSMod_QuadMeshColliders        collider;
             
             // Surface physics material
-            [ParserTarget("PhysicsMaterial", optional = true, allowMerge = true)]
+            [ParserTarget("PhysicsMaterial", allowMerge = true)]
             public PhysicsMaterialParser physicsMaterial
             {
                 get { return collider.physicsMaterial; }
@@ -69,28 +69,28 @@ namespace Kopernicus
             }
 
             // PQS level of detail settings
-            [ParserTarget("minLevel", optional = true)]
+            [ParserTarget("minLevel")]
             public NumericParser<int> minLevel 
             {
                 get { return pqsVersion.minLevel; }
                 set { pqsVersion.minLevel = value; }
             }
 
-            [ParserTarget("maxLevel", optional = true)]
+            [ParserTarget("maxLevel")]
             public NumericParser<int> maxLevel 
             {
                 get { return pqsVersion.maxLevel; }
                 set { pqsVersion.maxLevel = value; }
             }
 
-            [ParserTarget("minDetailDistance", optional = true)]
+            [ParserTarget("minDetailDistance")]
             public NumericParser<double> minDetailDistance 
             {
                 get { return pqsVersion.minDetailDistance; }
                 set { pqsVersion.minDetailDistance = value; }
             }
 
-            [ParserTarget("maxQuadLengthsPerFrame", optional = true)]
+            [ParserTarget("maxQuadLengthsPerFrame")]
             public NumericParser<float> maxQuadLengthsPerFrame 
             {
                 get { return pqsVersion.maxQuadLenghtsPerFrame; }
@@ -98,21 +98,21 @@ namespace Kopernicus
             }
 
             // CelestialBodyTransform fades. should more or less line up with ScaledVersion's fadeStart/fadeEnd
-            [ParserTarget("fadeStart", optional = true)]
+            [ParserTarget("fadeStart")]
             public NumericParser<float> fadeStart
             {
                 get { return transform.planetFade.fadeStart; }
                 set { transform.planetFade.fadeStart = value; }
             }
 
-            [ParserTarget("fadeEnd", optional = true)]
+            [ParserTarget("fadeEnd")]
             public NumericParser<float> fadeEnd
             {
                 get { return transform.planetFade.fadeEnd; }
                 set { transform.planetFade.fadeEnd = value; }
             }
 
-            [ParserTarget("deactivateAltitude", optional = true)]
+            [ParserTarget("deactivateAltitude")]
             public NumericParser<double> deactivateAltitude
             {
                 get { return transform.deactivateAltitude; }
@@ -120,7 +120,7 @@ namespace Kopernicus
             }
 
             // Map Export Arguments
-            [ParserTarget("mapMaxHeight", optional = true)]
+            [ParserTarget("mapMaxHeight")]
             public NumericParser<double> mapMaxHeight
             {
                 get { return pqsVersion.mapMaxHeight; }
@@ -128,7 +128,7 @@ namespace Kopernicus
             }
 
             [PreApply]
-            [ParserTarget("materialType", optional = true)]
+            [ParserTarget("materialType")]
             public EnumParser<PQSMaterialType> materialType
             {
                 set 
@@ -147,11 +147,11 @@ namespace Kopernicus
             }
 
             // Surface Material of the PQS
-            [ParserTarget("Material", optional = true, allowMerge = true, getChild = false)]
+            [ParserTarget("Material", allowMerge = true, getChild = false)]
             public Material surfaceMaterial;
 
             // Fallback Material of the PQS (its always the same material)
-            [ParserTarget("FallbackMaterial", optional = true, allowMerge = true, getChild = false)]
+            [ParserTarget("FallbackMaterial", allowMerge = true, getChild = false)]
             public PQSProjectionFallbackLoader fallbackMaterial;
 
             /**
@@ -165,10 +165,10 @@ namespace Kopernicus
                     pqsVersion = generatedBody.pqsVersion;
 
                     // Get the required PQS information
-                    transform = pqsVersion.GetComponentsInChildren<PQSMod_CelestialBodyTransform>(true).Where(Mod => Mod.transform.parent == pqsVersion.transform).FirstOrDefault();
-                    lightDirection = pqsVersion.GetComponentsInChildren<PQSMod_MaterialSetDirection>(true).Where(Mod => Mod.transform.parent == pqsVersion.transform).FirstOrDefault();
-                    uvs = pqsVersion.GetComponentsInChildren<PQSMod_UVPlanetRelativePosition>(true).Where(Mod => Mod.transform.parent == pqsVersion.transform).FirstOrDefault();
-                    collider = pqsVersion.GetComponentsInChildren<PQSMod_QuadMeshColliders>(true).Where(Mod => Mod.transform.parent == pqsVersion.transform).FirstOrDefault();
+                    transform = pqsVersion.GetComponentsInChildren<PQSMod_CelestialBodyTransform>(true).FirstOrDefault(Mod => Mod.transform.parent == pqsVersion.transform);
+                    lightDirection = pqsVersion.GetComponentsInChildren<PQSMod_MaterialSetDirection>(true).FirstOrDefault(Mod => Mod.transform.parent == pqsVersion.transform);
+                    uvs = pqsVersion.GetComponentsInChildren<PQSMod_UVPlanetRelativePosition>(true).FirstOrDefault(Mod => Mod.transform.parent == pqsVersion.transform);
+                    collider = pqsVersion.GetComponentsInChildren<PQSMod_QuadMeshColliders>(true).FirstOrDefault(Mod => Mod.transform.parent == pqsVersion.transform);
 
                     // Create physics material editor
                     physicsMaterial = new PhysicsMaterialParser(collider.physicsMaterial);
@@ -290,10 +290,10 @@ namespace Kopernicus
                 this.pqsVersion = pqsVersion;
 
                 // Get the required PQS information
-                transform = pqsVersion.GetComponentsInChildren<PQSMod_CelestialBodyTransform> (true).Where (mod => mod.transform.parent == pqsVersion.transform).FirstOrDefault ();
-                lightDirection = pqsVersion.GetComponentsInChildren<PQSMod_MaterialSetDirection>(true).Where (mod => mod.transform.parent == pqsVersion.transform).FirstOrDefault ();
-                uvs = pqsVersion.GetComponentsInChildren<PQSMod_UVPlanetRelativePosition>(true).Where (mod => mod.transform.parent == pqsVersion.transform).FirstOrDefault ();
-                collider = pqsVersion.GetComponentsInChildren<PQSMod_QuadMeshColliders>(true).Where (mod => mod.transform.parent == pqsVersion.transform).FirstOrDefault ();
+                transform = pqsVersion.GetComponentsInChildren<PQSMod_CelestialBodyTransform> (true).FirstOrDefault (mod => mod.transform.parent == pqsVersion.transform);
+                lightDirection = pqsVersion.GetComponentsInChildren<PQSMod_MaterialSetDirection> (true).FirstOrDefault (mod => mod.transform.parent == pqsVersion.transform);
+                uvs = pqsVersion.GetComponentsInChildren<PQSMod_UVPlanetRelativePosition> (true).FirstOrDefault (mod => mod.transform.parent == pqsVersion.transform);
+                collider = pqsVersion.GetComponentsInChildren<PQSMod_QuadMeshColliders> (true).FirstOrDefault (mod => mod.transform.parent == pqsVersion.transform);
 
                 // Create physics material editor
                 physicsMaterial = new PhysicsMaterialParser (collider.physicsMaterial);
@@ -333,8 +333,6 @@ namespace Kopernicus
             // Apply Event
             void IParserEventSubscriber.Apply(ConfigNode node)
             {
-                generatedBody.pqsVersion.surfaceMaterial = surfaceMaterial;
-                surfaceMaterial.name = Guid.NewGuid().ToString();
             }
             // PostApply Event
             void IParserEventSubscriber.PostApply(ConfigNode node)
@@ -345,6 +343,8 @@ namespace Kopernicus
                 generatedBody.pqsVersion.transform.name = generatedBody.name;
                 generatedBody.pqsVersion.gameObject.name = generatedBody.name;
                 generatedBody.pqsVersion.radius = generatedBody.celestialBody.Radius;
+                generatedBody.pqsVersion.surfaceMaterial = surfaceMaterial;
+                surfaceMaterial.name = Guid.NewGuid().ToString();
 
                 // Add an OnDemand Handler
                 OnDemand.OnDemandStorage.AddHandler(generatedBody.pqsVersion);
@@ -361,7 +361,7 @@ namespace Kopernicus
                 foreach (ConfigNode mod in node.GetNode("Mods").nodes)
                 {
                     // get the mod type
-                    if (types.Where(t => t.Name == mod.name).Count() == 0)
+                    if (types.Count(t => t.Name == mod.name) == 0)
                         continue;
                     Type loaderType = types.FirstOrDefault(t => t.Name == mod.name);
                     string testName = mod.name != "LandControl" ? "PQSMod_" + mod.name : "PQSLandControl";
@@ -372,7 +372,7 @@ namespace Kopernicus
                         continue;
                     }
                     // Do any PQS Mods already exist on this PQS matching this mod?
-                    IEnumerable<PQSMod> existingMods = pqsVersion.GetComponentsInChildren<PQSMod>(true).Where(m => m.GetType().Equals(modType) &&
+                    IEnumerable<PQSMod> existingMods = pqsVersion.GetComponentsInChildren<PQSMod>(true).Where(m => m.GetType() == modType &&
                                                                                                                    m.transform.parent == pqsVersion.transform);
 
                     // Create the loader
@@ -382,10 +382,10 @@ namespace Kopernicus
                     MethodInfo createNew = loaderType.GetMethod("Create", Type.EmptyTypes);
                     MethodInfo create = loaderType.GetMethod("Create", new Type[] { modType });
 
-                    if (existingMods.Count() > 0)
+                    if (existingMods.Any())
                     {
                         // Attempt to find a PQS mod we can edit that we have not edited before
-                        PQSMod existingMod = existingMods.Where(m => !patchedMods.Contains(m) && (mod.HasValue("name") ? m.name == mod.GetValue("name") : true)).FirstOrDefault();
+                        PQSMod existingMod = existingMods.FirstOrDefault(m => !patchedMods.Contains(m) && (!mod.HasValue("name") || (mod.HasValue("index") ? existingMods.ToList().IndexOf(m) == Int32.Parse(mod.GetValue("index")) && m.name == mod.GetValue("name") : m.name == mod.GetValue("name"))));
                         if (existingMod != null)
                         {
                             create.Invoke(loader, new[] { existingMod });

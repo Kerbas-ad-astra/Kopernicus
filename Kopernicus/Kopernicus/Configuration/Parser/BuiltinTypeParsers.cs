@@ -121,7 +121,7 @@ namespace Kopernicus
             public void SetFromString (string s)
             {
                 // Need a new list
-                value = new List<string> (Regex.Replace (s, "\\s+", "").Split (','));
+                value = new List<string> (s.Split (',').Select(a => a.Trim()));
             }
             public StringCollectionParser()
             {
@@ -422,15 +422,15 @@ namespace Kopernicus
         public class PositionParser : BaseLoader
         {
             // Latitude
-            [ParserTarget("latitude", optional = true)]
+            [ParserTarget("latitude")]
             public NumericParser<double> latitude { get; set; }
 
             // Longitude
-            [ParserTarget("longitude", optional = true)]
+            [ParserTarget("longitude")]
             public NumericParser<double> longitude { get; set; }
 
             // Altitude
-            [ParserTarget("altitude", optional = true)]
+            [ParserTarget("altitude")]
             public NumericParser<double> altitude { get; set; }
 
             // Default Constructor
@@ -578,7 +578,7 @@ namespace Kopernicus
 
                 if (s.StartsWith("BUILTIN/"))
                 {
-                    value = Utility.FindMapSO(s, typeof(T) == typeof(CBAttributeMapSO)) as T; // can't make built-in maps On-Demand.....yet... >:D
+                    value = Utility.FindMapSO<T>(s);
                 }
                 else
                 {
@@ -662,7 +662,7 @@ namespace Kopernicus
 
                 if (s.StartsWith("BUILTIN/"))
                 {
-                    value = Utility.FindMapSO(s, typeof(T) == typeof(CBAttributeMapSO)) as T;
+                    value = Utility.FindMapSO<T>(s);
                 }
                 else
                 {
@@ -780,35 +780,35 @@ namespace Kopernicus
             public PhysicMaterial material { get; set; }
 
             // Physics material parameters
-            [ParserTarget("bounceCombine", optional = true)]
+            [ParserTarget("bounceCombine")]
             public EnumParser<PhysicMaterialCombine> bounceCombine
             {
                 get { return material.bounceCombine; }
                 set { material.bounceCombine = value; }
             }
 
-            [ParserTarget("frictionCombine", optional = true)]
+            [ParserTarget("frictionCombine")]
             public EnumParser<PhysicMaterialCombine> frictionCombine
             {
                 get { return material.frictionCombine; }
                 set { material.frictionCombine = value; }
             }
 
-            [ParserTarget("bounciness", optional = true)]
+            [ParserTarget("bounciness")]
             public NumericParser<float> bounciness
             {
                 get { return material.bounciness; }
                 set { material.bounciness = value; }
             }           
             
-            [ParserTarget("staticFriction", optional = true)]
+            [ParserTarget("staticFriction")]
             public NumericParser<float> staticFriction
             { 
                 get { return material.staticFriction; }
                 set { material.staticFriction = value; }
             }
             
-            [ParserTarget("dynamicFriction", optional = true)]
+            [ParserTarget("dynamicFriction")]
             public NumericParser<float> dynamicFriction
             {
                 get { return material.dynamicFriction; }
@@ -884,6 +884,45 @@ namespace Kopernicus
             public static implicit operator MeshParser(Mesh mesh)
             {
                 return new MeshParser(mesh);
+            }
+        }
+
+        [RequireConfigType(ConfigType.Value)]
+        public class AssetParser<T> : IParsable where T : UnityEngine.Object
+        {
+            // The loaded value
+            public T value;
+
+            // Load the AssetBundle with the object
+            public void SetFromString(string s)
+            {
+                string[] split = s.Split(':');
+                if (!File.Exists(KSPUtil.ApplicationRootPath + "GameData/" + split[0]))
+                {
+                    Logger.Active.Log("Couldn't find asset file at path: " + KSPUtil.ApplicationRootPath + "GameData/" + split[0]);
+                    return;
+                }
+                AssetBundle bundle = AssetBundle.CreateFromMemoryImmediate(File.ReadAllBytes(KSPUtil.ApplicationRootPath + "GameData/" + split[0]));
+                value = UnityEngine.Object.Instantiate(bundle.LoadAsset<T>(split[1]));
+                bundle.Unload(true);
+            }
+            public AssetParser()
+            {
+
+            }
+            public AssetParser(T value)
+            {
+                this.value = value;
+            }
+
+            // Convert
+            public static implicit operator T(AssetParser<T> parser)
+            {
+                return parser.value;
+            }
+            public static implicit operator AssetParser<T>(T value)
+            {
+                return new AssetParser<T>(value);
             }
         }
 

@@ -56,7 +56,7 @@ namespace Kopernicus
             public static Loader Instance { get; set; }
 
             // The name of the PSystem
-            [ParserTarget("name", optional = true)]
+            [ParserTarget("name")]
             public string name
             {
                 get { return systemPrefab.systemName; }
@@ -64,7 +64,7 @@ namespace Kopernicus
             }
 
             // TimeScale for the planets
-            [ParserTarget("timeScale", optional = true)]
+            [ParserTarget("timeScale")]
             public NumericParser<double> systemTimeScale
             {
                 get { return systemPrefab.systemTimeScale; }
@@ -72,7 +72,7 @@ namespace Kopernicus
             }
 
             // Scale of the System
-            [ParserTarget("scale", optional = true)]
+            [ParserTarget("scale")]
             public NumericParser<double> systemScale
             {
                 get { return systemPrefab.systemScale; }
@@ -80,7 +80,7 @@ namespace Kopernicus
             }
 
             // Global Epoch setting
-            [ParserTarget("Epoch", optional = true)]
+            [ParserTarget("Epoch")]
             public NumericParser<double> epoch
             {
                 get { return Templates.epoch; }
@@ -88,7 +88,7 @@ namespace Kopernicus
             }
 
             // If the OnDemand Systems are enabled
-            [ParserTarget("useOnDemand", optional = true)]
+            [ParserTarget("useOnDemand")]
             public NumericParser<bool> useOnDemand
             {
                 get { return OnDemand.OnDemandStorage.useOnDemand; }
@@ -96,7 +96,7 @@ namespace Kopernicus
             }
 
             // If the OnDemand System should load missing maps
-            [ParserTarget("onDemandLoadOnMissing", optional = true)]
+            [ParserTarget("onDemandLoadOnMissing")]
             public NumericParser<bool> onDemandLoadOnMissing
             {
                 get { return OnDemand.OnDemandStorage.onDemandLoadOnMissing; }
@@ -104,23 +104,34 @@ namespace Kopernicus
             }
 
             // If the OnDemand System should write a debug message when a texture is missing
-            [ParserTarget("onDemandLogOnMissing", optional = true)]
+            [ParserTarget("onDemandLogOnMissing")]
             public NumericParser<bool> onDemandLogOnMissing
             {
                 get { return OnDemand.OnDemandStorage.onDemandLogOnMissing; }
                 set { OnDemand.OnDemandStorage.onDemandLogOnMissing = value; }
             }
 
+            // Set this to the unload delay in seconds
+            [ParserTarget("onDemandUnloadDelay")]
+            public NumericParser<int> onDemandUnloadDelay
+            {
+                get { return OnDemand.OnDemandStorage.onDemandUnloadDelay; }
+                set { OnDemand.OnDemandStorage.onDemandUnloadDelay = value; }
+            }
+
             // The body that is displayed at main menu
-            [ParserTarget("mainMenuBody", optional = true)]
+            [ParserTarget("mainMenuBody")]
             public string mainMenuBody
             {
                 get { return Templates.menuBody; }
                 set { Templates.menuBody = value; }
             }
 
+            // Whether the main menu body should be randomized
+            public List<string> randomMainMenuBodies = new List<String>();
+
             // The maximum viewing distance in tracking station
-            [ParserTarget("maxViewingDistance", optional = true)]
+            [ParserTarget("maxViewingDistance")]
             public NumericParser<double> maxViewDistance
             {
                 get { return Templates.maxViewDistance; }
@@ -128,7 +139,7 @@ namespace Kopernicus
             }
 
             // Fade multiplier for tracking station
-            [ParserTarget("scaledSpaceFaderMult", optional = true)]
+            [ParserTarget("scaledSpaceFaderMult")]
             public NumericParser<double> scaledSpaceFaderMult
             {
                 get { return ScaledSpaceFader.faderMult; }
@@ -250,6 +261,10 @@ namespace Kopernicus
                 List<int> numbers = new List<int>() { 0 };
                 int index = bodies.Sum(b => b.Value.generatedBody.flightGlobalsIndex);
                 PatchFGI(ref numbers, ref index, systemPrefab.rootBody);
+
+                // Main Menu bodies
+                if (randomMainMenuBodies.Any())
+                    Templates.menuBody = randomMainMenuBodies[new System.Random().Next(0, randomMainMenuBodies.Count)];
             }
 
             // Sort bodies by distance from parent body

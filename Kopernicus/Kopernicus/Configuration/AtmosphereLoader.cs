@@ -45,15 +45,20 @@ namespace Kopernicus
 
             // Do we have an atmosphere?
             [PreApply]
-            [ParserTarget("enabled", optional = true)]
+            [ParserTarget("enabled")]
             public NumericParser<bool> enabled 
             {
                 get { return celestialBody.atmosphere; }
                 set { celestialBody.atmosphere = value; }
             }
 
+            // Whether an AFG should get added
+            [PreApply]
+            [ParserTarget("addAFG")]
+            public NumericParser<bool> addAFG = new NumericParser<bool>(true);
+
             // Does this atmosphere contain oxygen
-            [ParserTarget("oxygen", optional = true)]
+            [ParserTarget("oxygen")]
             public NumericParser<bool> oxygen 
             {
                 get { return celestialBody.atmosphereContainsOxygen; }
@@ -61,7 +66,7 @@ namespace Kopernicus
             }
 
             // Density at sea level
-            [ParserTarget("staticDensityASL", optional = true)]
+            [ParserTarget("staticDensityASL")]
             public NumericParser<double> atmDensityASL
             {
                 get { return celestialBody.atmDensityASL; }
@@ -69,7 +74,7 @@ namespace Kopernicus
             }
 
             // atmosphereAdiabaticIndex
-            [ParserTarget("adiabaticIndex", optional = true)]
+            [ParserTarget("adiabaticIndex")]
             public NumericParser<double> atmosphereAdiabaticIndex
             {
                 get { return celestialBody.atmosphereAdiabaticIndex; }
@@ -77,19 +82,19 @@ namespace Kopernicus
             }
 
             // atmosphere cutoff altitude (x3, for backwards compatibility)
-            [ParserTarget("maxAltitude", optional = true)]
+            [ParserTarget("maxAltitude")]
             public NumericParser<double> maxAltitude
             {
                 get { return celestialBody.atmosphereDepth; }
                 set { celestialBody.atmosphereDepth = value; }
             }
-            [ParserTarget("altitude", optional = true)]
+            [ParserTarget("altitude")]
             public NumericParser<double> altitude
             {
                 get { return celestialBody.atmosphereDepth; }
                 set { celestialBody.atmosphereDepth = value; }
             }
-            [ParserTarget("atmosphereDepth", optional = true)]
+            [ParserTarget("atmosphereDepth")]
             public NumericParser<double> atmosphereDepth
             {
                 get { return celestialBody.atmosphereDepth; }
@@ -97,7 +102,7 @@ namespace Kopernicus
             }
 
             // atmosphereGasMassLapseRate
-            [ParserTarget("gasMassLapseRate", optional = true)]
+            [ParserTarget("gasMassLapseRate")]
             public NumericParser<double> atmosphereGasMassLapseRate
             {
                 get { return celestialBody.atmosphereGasMassLapseRate; }
@@ -105,7 +110,7 @@ namespace Kopernicus
             }
 
             // atmosphereMolarMass
-            [ParserTarget("atmosphereMolarMass", optional = true)]
+            [ParserTarget("atmosphereMolarMass")]
             public NumericParser<double> atmosphereMolarMass
             {
                 get { return celestialBody.atmosphereMolarMass; }
@@ -113,7 +118,7 @@ namespace Kopernicus
             }
 
             // Pressure curve
-            [ParserTarget("pressureCurve", optional = true)]
+            [ParserTarget("pressureCurve")]
             public FloatCurveParser pressureCurve
             {
                 get { return celestialBody.atmosphereUsePressureCurve ? celestialBody.atmospherePressureCurve : null; }
@@ -125,7 +130,7 @@ namespace Kopernicus
             }
 
             // atmospherePressureCurveIsNormalized
-            [ParserTarget("pressureCurveIsNormalized", optional = true)]
+            [ParserTarget("pressureCurveIsNormalized")]
             public NumericParser<bool> atmospherePressureCurveIsNormalized
             {
                 get { return celestialBody.atmospherePressureCurveIsNormalized; }
@@ -133,7 +138,7 @@ namespace Kopernicus
             }
 
             // Static pressure at sea level (all worlds are set to 1.0f?)
-            [ParserTarget("staticPressureASL", optional = true)]
+            [ParserTarget("staticPressureASL")]
             public NumericParser<double> staticPressureASL
             {
                 get { return celestialBody.atmospherePressureSeaLevel; }
@@ -141,7 +146,7 @@ namespace Kopernicus
             }
 
             // Temperature curve (see below)
-            [ParserTarget("temperatureCurve", optional = true)]
+            [ParserTarget("temperatureCurve")]
             public FloatCurveParser temperatureCurve 
             {
                 get { return celestialBody.atmosphereUseTemperatureCurve ? celestialBody.atmosphereTemperatureCurve : null; }
@@ -153,7 +158,7 @@ namespace Kopernicus
             }
 
             // atmosphereTemperatureCurveIsNormalized
-            [ParserTarget("temperatureCurveIsNormalized", optional = true)]
+            [ParserTarget("temperatureCurveIsNormalized")]
             public NumericParser<bool> atmosphereTemperatureCurveIsNormalized
             {
                 get { return celestialBody.atmosphereTemperatureCurveIsNormalized; }
@@ -161,7 +166,7 @@ namespace Kopernicus
             }
 
             // atmosphereTemperatureLapseRate
-            [ParserTarget("temperatureLapseRate", optional = true)]
+            [ParserTarget("temperatureLapseRate")]
             public NumericParser<double> atmosphereTemperatureLapseRate
             {
                 get { return celestialBody.atmosphereTemperatureLapseRate; }
@@ -169,7 +174,7 @@ namespace Kopernicus
             }
 
             // TemperatureSeaLevel
-            [ParserTarget("temperatureSeaLevel", optional = true)]
+            [ParserTarget("temperatureSeaLevel")]
             public NumericParser<double> atmosphereTemperatureSeaLevel
             {
                 get { return celestialBody.atmosphereTemperatureSeaLevel; }
@@ -177,7 +182,7 @@ namespace Kopernicus
             }
 
             // atmosphereTemperatureSunMultCurve
-            [ParserTarget("temperatureSunMultCurve", optional = true)]
+            [ParserTarget("temperatureSunMultCurve")]
             public FloatCurveParser atmosphereTemperatureSunMultCurve
             {
                 get { return celestialBody.atmosphereTemperatureSunMultCurve; }
@@ -185,7 +190,7 @@ namespace Kopernicus
             }
 
             // Temperature latitude bias
-            [ParserTarget("temperatureLatitudeBiasCurve", optional = true)]
+            [ParserTarget("temperatureLatitudeBiasCurve")]
             public FloatCurveParser latitudeTemperatureBiasCurve
             {
                 get { return celestialBody.latitudeTemperatureBiasCurve; }
@@ -193,7 +198,7 @@ namespace Kopernicus
             }
 
             // latitudeTemperatureSunMultCurve
-            [ParserTarget("temperatureLatitudeSunMultCurve", optional = true)]
+            [ParserTarget("temperatureLatitudeSunMultCurve")]
             public FloatCurveParser latitudeTemperatureSunMultCurve
             {
                 get { return celestialBody.latitudeTemperatureSunMultCurve; }
@@ -201,7 +206,7 @@ namespace Kopernicus
             }
 
             // axialTemperatureSunMultCurve
-            [ParserTarget("temperatureAxialSunBiasCurve", optional = true)]
+            [ParserTarget("temperatureAxialSunBiasCurve")]
             public FloatCurveParser axialTemperatureSunBiasCurve
             {
                 get { return celestialBody.axialTemperatureSunBiasCurve; }
@@ -209,7 +214,7 @@ namespace Kopernicus
             }
             
             // axialTemperatureSunMultCurve
-            [ParserTarget("temperatureAxialSunMultCurve", optional = true)]
+            [ParserTarget("temperatureAxialSunMultCurve")]
             public FloatCurveParser axialTemperatureSunMultCurve
             {
                 get { return celestialBody.axialTemperatureSunMultCurve; }
@@ -217,7 +222,7 @@ namespace Kopernicus
             }
             
             // eccentricityTemperatureBiasCurve
-            [ParserTarget("temperatureEccentricityBiasCurve", optional = true)]
+            [ParserTarget("temperatureEccentricityBiasCurve")]
             public FloatCurveParser eccentricityTemperatureBiasCurve
             {
                 get { return celestialBody.eccentricityTemperatureBiasCurve; }
@@ -225,7 +230,7 @@ namespace Kopernicus
             }
 
             // ambient atmosphere color
-            [ParserTarget("ambientColor", optional = true)]
+            [ParserTarget("ambientColor")]
             public ColorParser ambientColor 
             {
                 get { return celestialBody.atmosphericAmbientColor; }
@@ -233,7 +238,7 @@ namespace Kopernicus
             }
 
             // light color
-            [ParserTarget("lightColor", optional = true)]
+            [ParserTarget("lightColor")]
             public ColorParser lightColor 
             {
                 get { return scaledVersion.GetComponentsInChildren<AtmosphereFromGround>(true)[0].waveLength; }
@@ -241,14 +246,14 @@ namespace Kopernicus
             }
 
             // AFG
-            [ParserTarget("AtmosphereFromGround", optional = true, allowMerge = true)]
+            [ParserTarget("AtmosphereFromGround", allowMerge = true)]
             public AtmosphereFromGroundLoader atmosphereFromGround { get; set; }
 
             // Parser apply event
             void IParserEventSubscriber.Apply (ConfigNode node)
             { 
                 // If we don't want an atmosphere, ignore this step
-                if(!celestialBody.atmosphere)
+                if(!celestialBody.atmosphere || !addAFG)
                     return;
 
                 // If we don't already have an atmospheric shell generated
@@ -267,6 +272,8 @@ namespace Kopernicus
                     MeshFilter meshFilter             = scaledAtmosphere.AddComponent<MeshFilter>();
                     meshFilter.sharedMesh             = Templates.ReferenceGeosphere;
                     scaledAtmosphere.AddComponent<AtmosphereFromGround>();
+
+                    // Store the AFG
                     atmosphereFromGround = new AtmosphereFromGroundLoader();
 
                     // Setup known defaults
