@@ -261,11 +261,30 @@ namespace Kopernicus
             }
 
             // If the body should be hidden in RnD
-            [ParserTarget("hiddenRnD")]
-            public NumericParser<bool> hiddenRnD
+            [ParserTarget("RDVisibility")]
+            public EnumParser<RDVisibility> hiddenRnD
             {
-                get { return Templates.hiddenRnD.Contains(celestialBody.transform.name); }
-                set { if (value.value) Templates.hiddenRnD.Add(celestialBody.transform.name); }
+                get
+                {
+                    if (Templates.hiddenRnD.ContainsKey(celestialBody.transform.name))
+                        return Templates.hiddenRnD[celestialBody.transform.name];
+                    return RDVisibility.VISIBLE;
+                }
+                set
+                {
+                    if (Templates.hiddenRnD.ContainsKey(celestialBody.transform.name))
+                        Templates.hiddenRnD[celestialBody.transform.name] = value;
+                    else
+                        Templates.hiddenRnD.Add(celestialBody.transform.name, value);
+                }
+            }
+
+            // How visible should the planet be in the science archives
+            public enum RDVisibility
+            {
+                VISIBLE,
+                NOICON,
+                HIDDEN
             }
 
             // Apply Event
@@ -325,9 +344,9 @@ namespace Kopernicus
             {
                 double rsq = celestialBody.Radius;
                 rsq *= rsq;
-                celestialBody.gMagnitudeAtCenter = celestialBody.GeeASL * 9.81 * rsq;
+                celestialBody.gMagnitudeAtCenter = celestialBody.GeeASL * 9.80665 * rsq;
                 celestialBody.gravParameter = celestialBody.gMagnitudeAtCenter;
-                celestialBody.Mass = celestialBody.gravParameter * (1 / 6.674E-11);
+                celestialBody.Mass = celestialBody.gravParameter * (1 / 6.67408E-11);
                 Logger.Active.Log("Via surface G, set gravParam to " + celestialBody.gravParameter + ", mass to " + celestialBody.Mass);
             }
 
@@ -336,8 +355,8 @@ namespace Kopernicus
             {
                 double rsq = celestialBody.Radius;
                 rsq *= rsq;
-                celestialBody.GeeASL = celestialBody.Mass * (6.674E-11 / 9.81) / rsq;
-                celestialBody.gMagnitudeAtCenter = celestialBody.GeeASL * 9.81 * rsq;
+                celestialBody.GeeASL = celestialBody.Mass * (6.67408E-11 / 9.80665) / rsq;
+                celestialBody.gMagnitudeAtCenter = celestialBody.GeeASL * 9.80665 * rsq;
                 celestialBody.gravParameter = celestialBody.gMagnitudeAtCenter;
                 Logger.Active.Log("Via mass, set gravParam to " + celestialBody.gravParameter + ", surface G to " + celestialBody.GeeASL);
             }
@@ -347,8 +366,8 @@ namespace Kopernicus
             {
                 double rsq = celestialBody.Radius;
                 rsq *= rsq;
-                celestialBody.Mass = celestialBody.gravParameter * (1 / 6.674E-11);
-                celestialBody.GeeASL = celestialBody.gravParameter / 9.81 / rsq;
+                celestialBody.Mass = celestialBody.gravParameter * (1 / 6.67408E-11);
+                celestialBody.GeeASL = celestialBody.gravParameter / 9.80665 / rsq;
                 celestialBody.gMagnitudeAtCenter = celestialBody.gravParameter;
                 Logger.Active.Log("Via gravParam, set mass to " + celestialBody.Mass + ", surface G to " + celestialBody.GeeASL);
             }
