@@ -3,7 +3,7 @@
  * ====================================
  * Created by: BryceSchroeder and Teknoman117 (aka. Nathaniel R. Lewis) 
  * Maintained by: Thomas P., NathanKell and KillAshley
- * Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, zengei, MrHappyFace
+ * Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, zengei, MrHappyFace, Sigma88
  * ------------------------------------------------------------- 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -364,11 +364,10 @@ namespace Kopernicus
                     if (types.Count(t => t.Name == mod.name) == 0)
                         continue;
                     Type loaderType = types.FirstOrDefault(t => t.Name == mod.name);
-                    string testName = mod.name != "LandControl" ? "PQSMod_" + mod.name : "PQSLandControl";
-                    Type modType = types.FirstOrDefault(t => t.Name == testName);
+                    Type modType = loaderType.BaseType.GetGenericArguments()[0];
                     if (loaderType == null || modType == null)
                     {
-                        Debug.LogError("MOD NULL: Loadertype " + mod.name + " with mod type " + testName + " and null? " + (loaderType == null) + (modType == null));
+                        Debug.LogError("MOD NULL: Loadertype " + mod.name + " with mod type " + modType.Name + " and null? " + (loaderType == null) + (modType == null));
                         continue;
                     }
                     // Do any PQS Mods already exist on this PQS matching this mod?
@@ -389,21 +388,21 @@ namespace Kopernicus
                         if (existingMod != null)
                         {
                             create.Invoke(loader, new[] { existingMod });
-                            Parser.LoadObjectFromConfigurationNode(loader, mod);
+                            Parser.LoadObjectFromConfigurationNode(loader, mod, "Kopernicus");
                             patchedMods.Add(existingMod);
                             Logger.Active.Log("PQSLoader.PostApply(ConfigNode): Patched PQS Mod => " + modType);
                         }
                         else
                         {
                             createNew.Invoke(loader, null);
-                            Parser.LoadObjectFromConfigurationNode(loader, mod);
+                            Parser.LoadObjectFromConfigurationNode(loader, mod, "Kopernicus");
                             Logger.Active.Log("PQSLoader.PostApply(ConfigNode): Added PQS Mod => " + modType);
                         }
                     }
                     else
                     {
                         createNew.Invoke(loader, null);
-                        Parser.LoadObjectFromConfigurationNode(loader, mod);
+                        Parser.LoadObjectFromConfigurationNode(loader, mod, "Kopernicus");
                         Logger.Active.Log("PQSLoader.PostApply(ConfigNode): Added PQS Mod => " + modType);
                     }
                 }

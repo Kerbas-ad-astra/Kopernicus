@@ -3,7 +3,7 @@
  * ====================================
  * Created by: BryceSchroeder and Teknoman117 (aka. Nathaniel R. Lewis)
  * Maintained by: Thomas P., NathanKell and KillAshley
- * Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, zengei, MrHappyFace
+ * Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, zengei, MrHappyFace, Sigma88
  * -------------------------------------------------------------
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -49,6 +49,11 @@ namespace Kopernicus
             public static List<KopernicusStar> Stars;
 
             /// <summary>
+            /// The results of the latest flux calculation for each star
+            /// </summary>
+            public static Dictionary<string, double> SolarFlux;
+
+            /// <summary>
             /// The currently active star, for stuff we cant patch
             /// </summary>
             public static KopernicusStar Current;
@@ -86,6 +91,10 @@ namespace Kopernicus
                 double solarFlux = flightIntegrator.solarFlux;
                 double bodyEmissiveFlux = flightIntegrator.bodyEmissiveFlux;
                 double bodyAlbedoFlux = flightIntegrator.bodyAlbedoFlux;
+                if (!SolarFlux.ContainsKey(Current.name))
+                    SolarFlux.Add(Current.name, solarFlux);
+                else
+                    SolarFlux[Current.name] = solarFlux;
 
                 // Calculate the values for all bodies
                 foreach (KopernicusStar star in Stars.Where(s => s.sun != FlightIntegrator.sunBody))
@@ -104,6 +113,10 @@ namespace Kopernicus
                     solarFlux += flightIntegrator.solarFlux;
                     bodyEmissiveFlux += flightIntegrator.bodyEmissiveFlux;
                     bodyAlbedoFlux += flightIntegrator.bodyAlbedoFlux;
+                    if (!SolarFlux.ContainsKey(star.name))
+                        SolarFlux.Add(star.name, solarFlux);
+                    else
+                        SolarFlux[star.name] = solarFlux;
                 }
 
                 // Reapply
@@ -111,10 +124,17 @@ namespace Kopernicus
                 flightIntegrator.solarFlux = solarFlux;
                 flightIntegrator.bodyEmissiveFlux = bodyEmissiveFlux;
                 flightIntegrator.bodyAlbedoFlux = bodyAlbedoFlux;
+
+                // Set Physics
+                PhysicsGlobals.SolarLuminosityAtHome = Current.shifter.solarLuminosity;
+                PhysicsGlobals.SolarInsolationAtHome = Current.shifter.solarInsolation;
+                CalculatePhysics(); 
             }
 
             /// <summary>
             /// Fixes the Calculation for Luminosity
+            /// NEVER REMOVE THIS AGAIN!
+            /// EVEN IF SQUAD MAKES EVERY FIELD PUBLIC AND OPENSOURCE AND WHATNOT
             /// </summary>
             public static void CalculatePhysics()
             {
@@ -153,7 +173,7 @@ namespace Kopernicus
 
                 // Get Solar Flux
                 double realDistanceToSun = 0;
-                if (!Physics.Raycast(ray, out raycastHit, Single.MaxValue, ModularFI.ModularFlightIntegrator.SunLayerMask))
+                if (!Physics.Raycast(ray, out raycastHit, Single.MaxValue, ModularFlightIntegrator.SunLayerMask))
                 {
                     fi.Vessel.directSunlight = true;
                     realDistanceToSun = scale * ScaledSpace.ScaleFactor - star.sun.Radius;
@@ -187,6 +207,8 @@ namespace Kopernicus
             {
                 if (Stars == null)
                     Stars = new List<KopernicusStar>();
+                if (SolarFlux == null)
+                    SolarFlux = new Dictionary<string, double>();
                 Stars.Add(this);
                 DontDestroyOnLoad(this);
                 light = gameObject.GetComponent<Light>();

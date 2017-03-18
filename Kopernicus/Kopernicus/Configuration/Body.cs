@@ -3,7 +3,7 @@
  * ====================================
  * Created by: BryceSchroeder and Teknoman117 (aka. Nathaniel R. Lewis)
  * Maintained by: Thomas P., NathanKell and KillAshley
- * Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, zengei, MrHappyFace
+ * Additional Content by: Gravitasi, aftokino, KCreator, Padishar, Kragrathea, OvenProofMars, zengei, MrHappyFace, Sigma88
  * ------------------------------------------------------------- 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -75,7 +75,7 @@ namespace Kopernicus
                         changer.newName = value;
                     }
                     else
-                        generatedBody.celestialBody.gameObject.AddComponent<NameChanger>().newName = cbNameLater;
+                        generatedBody.celestialBody.gameObject.GetComponent<NameChanger>().newName = cbNameLater;
                 }
             }
             
@@ -91,8 +91,8 @@ namespace Kopernicus
             [ParserTarget("finalizeOrbit")]
             public NumericParser<bool> finalizeOrbit
             {
-                get { return Templates.finalizeBodies.Contains(generatedBody.name); }
-                set { if (value) Templates.finalizeBodies.Add(generatedBody.name); }
+                get { return generatedBody.Has("finalizeBody"); }
+                set { if (value) generatedBody.Set("finalizeBody", true); }
             }
 
             // Whether this body should be taken into account for the main menu body stuff
@@ -147,6 +147,13 @@ namespace Kopernicus
             // Wrapper around DebugMode settings
             [ParserTarget("Debug")]
             public DebugLoader debug { get; set; }
+
+            // Post spawn orbit patcher
+            [ParserTarget("PostSpawnOrbit")]
+            public ConfigNode postspawn
+            {
+                set { generatedBody.Set("orbitPatches", value); }
+            }
 
             // Parser Apply Event
             void IParserEventSubscriber.Apply(ConfigNode node)
@@ -224,7 +231,7 @@ namespace Kopernicus
                 if (barycenter.value)
                 {
                     // Register the body for post-spawn patching
-                    Templates.barycenters.Add(generatedBody.name);
+                    generatedBody.Set("barycenter", true);
 
                     // Nuke the PQS
                     if (generatedBody.pqsVersion != null)
@@ -261,7 +268,7 @@ namespace Kopernicus
                     generatedBody.celestialBody.gameObject.AddComponent<Wiresphere>();
 
                 // Loads external parser targets
-                Parser.LoadExternalParserTargetsRecursive(node);
+                Parser.LoadExternalParserTargets(node, "Kopernicus");
 
                 // Post gen celestial body
                 Utility.DumpObjectFields(generatedBody.celestialBody, " Celestial Body ");
